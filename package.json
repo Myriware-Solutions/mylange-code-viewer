@@ -9,6 +9,8 @@
   "categories": [
     "Programming Languages"
   ],
+  "repository": {"url": "https://github.com/Myriware-Solutions/mylange-code-viewer"},
+  "publisher": "MyriwareSolutions",
   "contributes": {
     "languages": [{
       "id": "mylange",
