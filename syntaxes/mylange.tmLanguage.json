@@ -1,0 +1,223 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Mylange",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#single-line-comments"
+		},
+		{
+			"include": "#multi-line-comments"
+		},
+		{
+			"include": "#dirrectives"
+		},
+		{
+			"include": "#functions"
+		},
+		{
+			"include": "#function-call"
+		},
+		{
+			"include": "#variable-definition"
+		},
+		{
+			"include": "#class-definition"
+		},
+		{
+			"include": "#for-loop-definition"
+		},
+		{
+			"include": "#at-modifier"
+		},
+		{
+			"match": "(return)\\s+(.*)",
+			"captures": {
+				"1": {"name": "keyword.control.mylange"},
+				"2": {"patterns": [{"include": "#values"}]}
+			}
+		},
+		{
+			"include": "#values"
+		}
+	],
+	"repository": {
+		"single-line-comments": {
+			"begin": "//",
+			"end": "$",
+			"name": "comment.mylange"
+		},
+		"multi-line-comments": {
+			"begin": "/\\[",
+			"end": "\\]/",
+			"name": "comment.block.mylange"
+		},
+		"dirrectives": {
+			"begin": "(\\#\\w+)",
+			"end": ";",
+			"patterns": [
+				{
+					"match": "\\<.*\\>",
+					"name": "string.quoted.double.mylange"
+				}
+			],
+			"captures": {
+				"1": {
+					"name": "storage.modifier.mylange"
+				}
+			}
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.mylange",
+					"match": "\\b(if|then|else|while)\\b"
+				},
+				{
+					"name": "storage.modifier.mylange",
+					"match": "\\b(public|true|false|nil|this)\\b"
+				}
+			]
+		},
+		"values": {
+			"patterns": [
+				{
+					"match": "(new)\\s+([\\w.]+)\\((.*)\\)",
+					"captures": {
+						"1": { "name": "keyword.control.mylange" },
+						"2": { "name": "entity.name.type.mylange" },
+						"3": {"patterns": [{"include": "#values"}]}
+					}
+				},
+				{
+					"begin": "\\(",
+					"end": "\\)",
+					"match": "(\\w+)\\s*=>\\s*(.*)(?=,|$)",
+					"captures": {
+						"1": {"name": "variable.mylange"},
+						"2": {"patterns": [{"include": "#values"}]}
+					}
+				},
+				{
+					"match": "((?:\\[[\\w, ]+\\]\\s*)|(?:\\w+\\s+\\w+\\s+))(in)(.*)",
+					"captures": {
+						"1": {"patterns": [
+							{
+								"match": "(\\w+)\\s+(\\w+)",
+								"captures": {
+									"1": {"name": "entity.name.type.mylange"},
+									"2": {"name": "variable.mylange"}
+								}
+							}
+						]},
+						"2": {"name": "keyword.control.mylange"},
+						"3": {"patterns": [{"include": "#values"}]}
+					}
+				},
+				{
+					"match": "\\.(\\w+)",
+					"captures": {
+						"1": {"name": "support.function.mylange"}
+					}
+				},
+				{
+					"match": "\\b(true|false)\\b",
+					"name": "storage.modifier.mylange"
+				},
+				{
+					"name": "string.quoted.double.mylange",
+					"begin": "\"",
+					"end": "\"",
+					"patterns": [
+						{
+							"name": "constant.character.escape.mylange",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "string.quoted.double.mylange",
+					"begin": "'",
+					"end": "'",
+					"patterns": [
+						{
+							"name": "constant.character.escape.mylange",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"match": "\\d+\\.?\\d*",
+					"name":"constant.numeric.mylange"
+				},
+				{
+					"match": "\\b\\w+\\b",
+					"name": "variable.mylange"
+				}
+			]
+		},
+		"functions": {
+			"match": "((?:@?\\w+\\s+)+)?(def)\\s+(\\w+)\\s+(\\w+)\\s*\\((.*)\\)\\s*(as)",
+			"captures": {
+				"1": { "name": "storage.modifier.mylange" },
+				"2": { "name": "keyword.control.mylange" },
+				"3": { "name": "entity.name.type.mylange" },
+				"4": {
+					"name": "entity.name.function.mylange"
+				},
+				"5": {
+					"patterns": [{
+						"match": "([\\w<>.]+)\\s+(\\w+)",
+						"captures": {
+							"1": {"name":"entity.name.type.mylange"},
+							"2": {"name":"variable.parameter.mylange"}
+						}
+					}]
+				},
+				"6": { "name": "keyword.control.mylange" }
+			}
+		},
+		"function-call": {
+			"match": "([\\w.:\\[\\]]+)\\((.*)\\)",
+			"captures": {
+				"1": {
+					"name": "entity.name.function.mylange"
+				},
+				"2": {"patterns": [{"include": "#values"}]}
+			}
+		},
+		"variable-definition": {
+			"match": "([a-zA-Z]+(?:<[a-zA-Z<>,|\\s.]+>)?) +(\\w+) *=> *(.*)",
+			"captures": {
+				"1": {"name":"entity.name.type.mylange"},
+				"2": {"name":"variable.mylange"},
+				"3": {"patterns": [{"include": "#values"}]}
+			}
+		},
+		"class-definition": {
+			"match": "(class)\\s+(\\w+)(?:\\s+(extends)\\s+(\\w+))?\\s+(has)",
+			"captures": {
+				"1": {"name":"keyword.control.mylange"},
+				"2": {"name":"entity.name.type.mylange"},
+				"3": {"name":"keyword.control.mylange"},
+				"4": {"name":"entity.name.type.mylange"},
+				"5": {"name":"keyword.control.mylange"}
+			}
+		},
+		"at-modifier": {
+			"match": "@default constructor",
+			"name": "storage.modifier.mylange"
+		},
+		"for-loop-definition": {
+			"match": "(for)\\s*\\((.*)\\)\\s*(do)",
+			"captures": {
+				"1": {"name":"keyword.control.mylange"},
+				"2": {"patterns": [{"include": "#values"}]},
+				"3": {"name":"keyword.control.mylange"}
+			}
+		}
+	},
+	"scopeName": "source.myl"
+}

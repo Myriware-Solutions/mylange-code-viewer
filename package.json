@@ -1,0 +1,29 @@
+{
+  "name": "mylange-code-viewer",
+  "displayName": "Mylange Code Viewer",
+  "description": "View Mylange Code with text highlighting!",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "mylange",
+      "aliases": ["Mylange", "mylange"],
+      "extensions": [".myl"],
+      "configuration": "./language-configuration.json",
+      "icon": {
+          "light": "./icons/MylangeEye_2026_black.svg",
+          "dark": "./icons/MylangeEye_2026_white.svg"
+        }
+    }],
+    "grammars": [{
+      "language": "mylange",
+      "scopeName": "source.myl",
+      "path": "./syntaxes/mylange.tmLanguage.json"
+    }]
+  }
+}
